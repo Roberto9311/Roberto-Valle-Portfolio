@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Roberto Valle Ramon — Portfolio</title>
+  <meta name="description" content="Personal portfolio for CSC 380 Assignment 2" />
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --panel: #121826;
+      --panel-2: #0f1522;
+      --text: #e6ecff;
+      --muted: #a9b4d0;
+      --accent: #7aa2ff;
+      --accent-2: #00d1b2;
+      --ring: rgba(122,162,255,.35);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 80% -10%, #162037 0%, var(--bg) 55%) fixed;
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Layout */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,15,23,.8), rgba(11,15,23,.35));
+      border-bottom: 1px solid rgba(122,162,255,.12);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .brand { display: flex; gap: 10px; align-items: center; font-weight: 700; letter-spacing: .3px; }
+    .brand .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 0 0 3px var(--ring); }
+
+    .nav ul { display: flex; gap: 18px; list-style: none; padding: 0; margin: 0; }
+    .nav a { padding: 8px 10px; border-radius: 10px; }
+    .nav a:hover { background: rgba(122,162,255,.08); text-decoration: none; }
+
+    .hero { padding: 70px 0 30px; }
+    .hero .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid rgba(122,162,255,.15);
+      box-shadow: 0 20px 50px rgba(0,0,0,.35);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .hero-inner { display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; padding: 28px; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; font-size: 12px; color: var(--muted); background: rgba(122,162,255,.08); border: 1px solid rgba(122,162,255,.18); }
+    .display { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 12px 0; }
+    .muted { color: var(--muted); }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(122,162,255,.25); background: var(--panel); color: var(--text); cursor: pointer; }
+    .btn:hover { border-color: rgba(122,162,255,.5); }
+    .btn.primary { background: linear-gradient(135deg, var(--accent), #9ad1ff); color: #0a1020; font-weight: 700; border: none; }
+
+    .avatar {
+      width: 100%; aspect-ratio: 1/1; border-radius: 20px; background: linear-gradient(135deg, #1a2540, #0d1222);
+      border: 1px solid rgba(122,162,255,.25);
+      display: grid; place-items: center; font-size: 24px; color: var(--muted);
+    }
+
+    section { padding: 40px 0; }
+    h2 { font-size: clamp(22px, 3.2vw, 32px); margin: 0 0 12px; }
+    .grid { display: grid; gap: 16px; }
+    .grid.cards { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid rgba(122,162,255,.12);
+      border-radius: 18px; padding: 18px;
+    }
+
+    .kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .kpi .card { text-align: center; }
+    .kpi .big { font-size: 28px; font-weight: 800; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 16px; }
+    .tab-btn { padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(122,162,255,.25); background: var(--panel-2); color: var(--text); cursor: pointer; }
+    .tab-btn[aria-selected="true"] { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #08101e; font-weight: 700; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Footer */
+    footer { padding: 28px 0 50px; color: var(--muted); border-top: 1px solid rgba(122,162,255,.12); margin-top: 20px; }
+
+    /* Mobile */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .kpi { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Roberto Valle Ramon</span>
+      </div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="card">
+        <div class="hero-inner">
+          <div>
+            <span class="pill">Open to opportunities</span>
+            <h1 class="display">Hi, I’m Roberto — builder, problem-solver, and student at TAMUC.</h1>
+            <p class="muted">I design and develop clean, accessible web experiences and enjoy data projects in Python. Below are selected projects, certifications, and publications. This site was created for <strong>CSC 380 — Assignment 2</strong>.</p>
+            <div class="cta-row">
+              <a class="btn primary" href="#projects">View Projects</a>
+              <a class="btn" href="https://github.com/new" target="_blank" rel="noreferrer">GitHub</a>
+              <a class="btn" href="mailto:you@example.com">Email me</a>
+            </div>
+          </div>
+          <div class="avatar" aria-label="Profile image placeholder">
+            Add your photo
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h2>About</h2>
+      <div class="grid cards">
+        <article class="card">
+          <h3>Who I am</h3>
+          <p>Undergrad at <strong>Texas A&M University–Commerce</strong>. Interests: Python, HTML/CSS/JS, data analysis, and hands‑on projects.</p>
+        </article>
+        <article class="card">
+          <h3>Skills</h3>
+          <p>Python (pandas, matplotlib), HTML, CSS, JavaScript, Git & GitHub, Excel/Sheets, C++ basics.</p>
+        </article>
+        <article class="card">
+          <h3>Highlights</h3>
+          <ul>
+            <li>Mushroom Dataset ML project (KNN, preprocessing)</li>
+            <li>Pac‑Man grid game (Python)</li>
+            <li>Tooling & DIY (hardware projects)</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- KPI / QUICK FACTS -->
+    <section aria-label="Quick stats">
+      <div class="kpi">
+        <div class="card"><div class="big">10+</div><div class="muted">Projects</div></div>
+        <div class="card"><div class="big">3</div><div class="muted">Certifications</div></div>
+        <div class="card"><div class="big">2</div><div class="muted">Publications</div></div>
+        <div class="card"><div class="big">4.8/5</div><div class="muted">Peer Reviews</div></div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <h2>Selected Projects</h2>
+      <div class="grid cards">
+        <article class="card">
+          <h3>Mushroom Classifier</h3>
+          <p class="muted">Binary classifier to predict edible vs poisonous mushrooms. Used scikit‑learn KNN, one‑hot encoding, and accuracy evaluation.</p>
+          <p><a href="#" aria-disabled="true">Repo (add link)</a></p>
+        </article>
+        <article class="card">
+          <h3>Pac‑Man Grid Game</h3>
+          <p class="muted">A grid‑based game exploring movement, collision, and simple AI behaviors. Built with Python.</p>
+          <p><a href="#" aria-disabled="true">Repo (add link)</a></p>
+        </article>
+        <article class="card">
+          <h3>Fungi Intro Slides</h3>
+          <p class="muted">1–2 minute teaching deck introducing fungi. Focus on structure and lifecycle visuals.</p>
+          <p><a href="#" aria-disabled="true">Slides (add link)</a></p>
+        </article>
+        <article class="card">
+          <h3>Tools & DIY</h3>
+          <p class="muted">Home projects: TV mount, shelving, and basic electrical—emphasis on planning and safety.</p>
+          <p><a href="#" aria-disabled="true">Album (add link)</a></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE / TABS -->
+    <section id="experience">
+      <h2>Experience & Credentials</h2>
+      <div role="tablist" aria-label="Experience tabs" class="tabs">
+        <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-projects" id="tab-projects">Projects</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-certs" id="tab-certs">Certifications</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-pubs" id="tab-pubs">Publications</button>
+      </div>
+
+      <div id="panel-projects" class="tab-panel active" role="tabpanel" aria-labelledby="tab-projects">
+        <div class="grid cards">
+          <article class="card"><h3>Mario Kart IV (Python)</h3><p class="muted">Sprite handling, collision, and input control. Focus on code cleanliness and reuse.</p></article>
+          <article class="card"><h3>Data Viz Lab</h3><p class="muted">Matplotlib charts (bar, line, scatter). Emphasis on reproducibility.</p></article>
+        </div>
+      </div>
+
+      <div id="panel-certs" class="tab-panel" role="tabpanel" aria-labelledby="tab-certs">
+        <div class="grid cards">
+          <article class="card"><h3>Google Data Analytics (Coursera)</h3><p class="muted">Spreadsheets, SQL basics, and viz storytelling.</p></article>
+          <article class="card"><h3>Responsive Web Dev</h3><p class="muted">HTML semantics, CSS layout (flex/grid), accessibility foundations.</p></article>
+        </div>
+      </div>
+
+      <div id="panel-pubs" class="tab-panel" role="tabpanel" aria-labelledby="tab-pubs">
+        <div class="grid cards">
+          <article class="card"><h3>Water & Mindfulness</h3><p class="muted">A short reflective essay inspired by Thales and everyday interactions with water.</p></article>
+          <article class="card"><h3>Generational Burnout</h3><p class="muted">Persuasive piece on addressing burnout and misconceptions of Gen Z / Millennials.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="grid cards">
+        <article class="card">
+          <p>Email: <a href="mailto:you@example.com">you@example.com</a><br>
+             GitHub: <a href="https://github.com/your-username" target="_blank" rel="noreferrer">github.com/your-username</a>
+          </p>
+          <p class="muted">Replace with your real contact info, then deploy via GitHub Pages (instructions below).</p>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        © <span id="yr"></span> Roberto Valle Ramon • Built with semantic HTML & CSS • CSC 380
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Smooth scroll for same-page anchors
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if (id.length > 1) {
+          e.preventDefault();
+          document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Tabs logic with a11y
+    const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
+    const panels = Array.from(document.querySelectorAll('.tab-panel'));
+
+    function activateTab(id) {
+      tabButtons.forEach(btn => btn.setAttribute('aria-selected', String(btn.id === id)));
+      panels.forEach(p => p.classList.toggle('active', p.getAttribute('aria-labelledby') === id));
+    }
+
+    tabButtons.forEach(btn => btn.addEventListener('click', () => activateTab(btn.id)));
+  </script>
+</body>
+</html>
